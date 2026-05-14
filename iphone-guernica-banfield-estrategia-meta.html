@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estrategia Meta Ads — iPhone Guernica & Banfield</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg2: #111111;
+  --bg3: #181818;
+  --border: #222222;
+  --border2: #2e2e2e;
+  --text: #f0f0f0;
+  --text2: #999999;
+  --text3: #555555;
+  --accent: #2563eb;
+  --accent2: #3b82f6;
+  --accent-dim: rgba(37, 99, 235, 0.1);
+  --accent-dim2: rgba(37, 99, 235, 0.05);
+  --green: #22c55e;
+  --green-dim: rgba(34,197,94,0.1);
+  --yellow: #f59e0b;
+  --radius: 12px;
+  --radius-lg: 16px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HERO ─────────────────────────────── */
+.hero {
+  padding: 48px 56px 56px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 85% 20%, rgba(37,99,235,0.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 56px;
+  position: relative;
+  z-index: 1;
+}
+
+.mc-logo {
+  height: 36px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.hero-chip {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chip-dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,100%{opacity:1;} 50%{opacity:.3;}
+}
+
+.hero-body { position: relative; z-index: 1; }
+
+.hero-eyebrow {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .18em;
+  color: var(--accent); margin-bottom: 16px;
+}
+
+.hero-title {
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 900; line-height: 1.05;
+  letter-spacing: -.03em; margin-bottom: 18px;
+}
+
+.hero-title em { font-style: normal; color: var(--accent); }
+
+.hero-desc {
+  font-size: 16px; color: var(--text2); font-weight: 400;
+  max-width: 520px; line-height: 1.65; margin-bottom: 44px;
+}
+
+.hero-metrics {
+  display: flex; gap: 0;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  max-width: 680px;
+}
+
+.hm {
+  flex: 1; padding: 20px 24px;
+  border-right: 1px solid var(--border2);
+}
+.hm:last-child { border-right: none; }
+
+.hm-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--text3); margin-bottom: 6px;
+}
+
+.hm-value {
+  font-size: 22px; font-weight: 900;
+  letter-spacing: -.02em; color: var(--text);
+}
+
+.hm-value.red { color: var(--accent); }
+
+/* ── TABS ─────────────────────────────── */
+.tabs-nav {
+  display: flex; gap: 0;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 56px;
+  position: sticky; top: 0; z-index: 20;
+}
+
+.tab-btn {
+  padding: 16px 20px;
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--text3); cursor: pointer;
+  border: none; background: none;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+}
+
+.tab-btn:hover { color: var(--text2); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── PANELS ────────────────────────────── */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── SECTION WRAPPER ─────────────────── */
+.sec {
+  padding: 52px 56px;
+  border-bottom: 1px solid var(--border);
+}
+.sec.alt { background: var(--bg2); }
+
+.sec-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .18em;
+  color: var(--accent); margin-bottom: 8px;
+}
+
+.sec-title {
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 800; letter-spacing: -.02em;
+  color: var(--text); margin-bottom: 6px;
+}
+
+.sec-sub {
+  font-size: 13px; color: var(--text3); margin-bottom: 32px;
+}
+
+/* ── CARDS ────────────────────────────── */
+.cards-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.cards-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.cards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.card {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px;
+  position: relative; overflow: hidden;
+  transition: border-color .15s;
+}
+
+.card:hover { border-color: rgba(232,23,58,.35); }
+
+.card.accent-top::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--accent);
+}
+
+.card-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--text3); margin-bottom: 10px;
+}
+
+.card-value {
+  font-size: 28px; font-weight: 900;
+  letter-spacing: -.02em; color: var(--text);
+  line-height: 1; margin-bottom: 5px;
+}
+
+.card-value.red { color: var(--accent); }
+.card-sub { font-size: 12px; color: var(--text3); }
+
+/* ── CAMP CARD ────────────────────────── */
+.camp-card {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.camp-head {
+  padding: 22px 22px 18px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+
+.camp-head.red-head { background: var(--accent-dim); border-bottom-color: rgba(232,23,58,.15); }
+.camp-head.dark-head { background: #0d0d0d; }
+
+.camp-num {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .16em;
+  color: var(--accent); margin-bottom: 6px;
+}
+
+.camp-name {
+  font-size: 19px; font-weight: 800;
+  letter-spacing: -.02em; color: var(--text);
+  line-height: 1.2; margin-bottom: 5px;
+}
+
+.camp-meta { font-size: 12px; color: var(--text3); }
+
+.camp-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 12px; background: var(--accent-dim);
+  border: 1px solid rgba(232,23,58,.25);
+  border-radius: 999px; padding: 5px 12px;
+  font-size: 11px; font-weight: 700; color: var(--accent);
+}
+
+.camp-body { padding: 20px 22px; }
+
+.adset-block {
+  margin-bottom: 16px; padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.adset-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+
+.adset-title {
+  font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .14em;
+  color: var(--accent); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 7px;
+}
+.adset-title::before {
+  content: ''; display: inline-block;
+  width: 3px; height: 11px;
+  background: var(--accent); border-radius: 2px;
+}
+
+.field-lbl {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--text3); margin-bottom: 5px; margin-top: 8px;
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.tag {
+  background: var(--bg); border: 1px solid var(--border2);
+  border-radius: 6px; padding: 3px 8px;
+  font-size: 10px; font-weight: 500; color: var(--text2);
+}
+
+.tag.r {
+  background: var(--accent-dim2);
+  border-color: rgba(232,23,58,.2);
+  color: #ff7090;
+}
+
+.tag.b {
+  background: rgba(59,130,246,.07);
+  border-color: rgba(59,130,246,.2);
+  color: #93c5fd;
+}
+
+.dist-bar {
+  display: flex; border-radius: 6px; overflow: hidden;
+  height: 24px; margin-top: 10px;
+  border: 1px solid var(--border2);
+}
+
+.d-cold {
+  background: var(--accent); flex: 4;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: white; letter-spacing: .06em;
+}
+
+.d-rmkt {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  background: var(--accent-dim);
+  font-size: 10px; font-weight: 800; color: var(--accent); letter-spacing: .06em;
+}
+
+.note-warn {
+  background: rgba(245,158,11,.07);
+  border: 1px solid rgba(245,158,11,.2);
+  border-radius: 8px; padding: 9px 12px;
+  font-size: 11px; color: #fcd34d; margin-top: 10px; line-height: 1.5;
+}
+
+/* ── TABLE ────────────────────────────── */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+.tbl thead th {
+  background: var(--accent); color: white;
+  padding: 10px 14px; text-align: left;
+  font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .1em;
+}
+
+.tbl thead th:first-child { border-radius: 8px 0 0 0; }
+.tbl thead th:last-child  { border-radius: 0 8px 0 0; }
+
+.tbl tbody td {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  color: var(--text2); font-weight: 500;
+}
+
+.tbl tbody tr:nth-child(even) td { background: var(--bg3); }
+.tbl tbody tr:hover td { background: rgba(232,23,58,.04); }
+
+.tbl .total td {
+  background: var(--bg3) !important;
+  border-top: 1px solid var(--border2); border-bottom: none;
+  color: var(--text); font-weight: 800; font-size: 14px;
+}
+
+.tbl .hl { color: var(--accent); font-weight: 800; }
+
+/* ── CHART CONTAINER ─────────────────── */
+.chart-wrap {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 20px;
+}
+
+.chart-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 4px;
+}
+
+.chart-sub {
+  font-size: 11px; color: var(--text3); margin-bottom: 20px;
+}
+
+/* ── TOGGLE ───────────────────────────── */
+.toggle-row {
+  display: flex; gap: 8px; margin-bottom: 28px;
+}
+
+.toggle-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  font-size: 12px; font-weight: 700;
+  color: var(--text3); cursor: pointer;
+  transition: all .15s;
+}
+
+.toggle-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* ── INSIGHT BLOCK ───────────────────── */
+.insight-block {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 24px 26px;
+}
+
+.insight-block h4 {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .15em;
+  color: var(--accent); margin-bottom: 16px;
+}
+
+.ins {
+  display: flex; gap: 12px; align-items: flex-start;
+  font-size: 13px; color: var(--text2); line-height: 1.6;
+  margin-bottom: 10px;
+}
+.ins:last-child { margin-bottom: 0; }
+.ins-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+.ins strong { color: var(--text); font-weight: 600; }
+
+/* ── STEP CARD ───────────────────────── */
+.step-card {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  padding: 26px 22px;
+}
+
+.step-num {
+  font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .14em;
+  color: var(--accent); margin-bottom: 10px;
+}
+
+.step-title {
+  font-size: 16px; font-weight: 800;
+  color: var(--text); margin-bottom: 7px;
+  letter-spacing: -.01em;
+}
+
+.step-desc { font-size: 12px; color: var(--text3); line-height: 1.65; }
+
+/* ── FOOTER ───────────────────────────── */
+.footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 28px 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.footer-text { font-size: 12px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ─────────────────────────────── -->
+<section class="hero">
+  <div class="hero-nav">
+    <img class="mc-logo"
+         src="https://mcmarketingdig.com/wp-content/uploads/2026/03/cropped-Mc-MArkrting-Logo.pdf-200x67.png"
+         alt="MC Marketing"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+    <div style="display:none; align-items:center; gap:10px;">
+      <div style="width:36px;height:36px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;font-size:16px;">M</div>
+      <span style="font-size:15px;font-weight:700;">MC Marketing</span>
+    </div>
+    <div class="hero-chip">
+      <div class="chip-dot"></div>
+      Meta Ads · Mayo 2025
+    </div>
+  </div>
+
+  <div class="hero-body">
+    <div class="hero-eyebrow">Estrategia Paid Media</div>
+    <h1 class="hero-title">
+      Estrategia <em>Meta Ads</em><br>
+      iPhone Guernica &amp; Banfield
+    </h1>
+    <p class="hero-desc">
+      Plan de lanzamiento para generar conversaciones calificadas en ambas sucursales y escalar la inversión donde mejor retorne.
+    </p>
+
+    <div class="hero-metrics">
+      <div class="hm">
+        <div class="hm-label">Presupuesto mensual</div>
+        <div class="hm-value red">$300K–$450K</div>
+      </div>
+      <div class="hm">
+        <div class="hm-label">Duración etapa 1</div>
+        <div class="hm-value">30 días</div>
+      </div>
+      <div class="hm">
+        <div class="hm-label">Campañas activas</div>
+        <div class="hm-value">3</div>
+      </div>
+      <div class="hm">
+        <div class="hm-label">Sucursales</div>
+        <div class="hm-value">2</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TABS NAV ─────────────────────────── -->
+<nav class="tabs-nav" id="tabs">
+  <button class="tab-btn active" onclick="showTab('estrategia')">Estrategia</button>
+  <button class="tab-btn" onclick="showTab('campanas')">Campañas</button>
+  <button class="tab-btn" onclick="showTab('presupuesto')">Presupuesto</button>
+  <button class="tab-btn" onclick="showTab('proyeccion')">Proyección 6M</button>
+</nav>
+
+<!-- ══════════════════════════════════════
+     PANEL: ESTRATEGIA
+══════════════════════════════════════ -->
+<div class="panel active" id="panel-estrategia">
+
+  <section class="sec alt">
+    <div class="sec-label">Objetivo</div>
+    <h2 class="sec-title">¿Qué queremos lograr?</h2>
+    <p class="sec-sub">La primera etapa es de aprendizaje. Generamos resultados mientras validamos qué zona escalar.</p>
+
+    <div class="cards-4" style="margin-bottom:32px;">
+      <div class="card accent-top">
+        <div class="card-label">Objetivo</div>
+        <div class="card-value" style="font-size:18px;line-height:1.3;">Conversaciones<br>calificadas</div>
+        <div class="card-sub">Desde Instagram DM</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Etapa inicial</div>
+        <div class="card-value">30 días</div>
+        <div class="card-sub">Datos + optimización</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Inversión diaria</div>
+        <div class="card-value red">$10–15K</div>
+        <div class="card-sub">ARS / día</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Distribución</div>
+        <div class="card-value">33% / 33% / 33%</div>
+        <div class="card-sub">Por campaña</div>
+      </div>
+    </div>
+
+    <div class="insight-block">
+      <h4>Premisas del lanzamiento</h4>
+      <div class="ins"><div class="ins-dot"></div><span>Los primeros 30 días son de <strong>aprendizaje</strong>: recopilamos datos, validamos creatividades y encontramos el costo por conversación objetivo.</span></div>
+      <div class="ins"><div class="ins-dot"></div><span>La distribución de presupuesto es <strong>pareja al inicio</strong>. A partir del mes 2, concentramos donde mejor retorne.</span></div>
+      <div class="ins"><div class="ins-dot"></div><span>Banfield y Guernica tienen <strong>enfoques distintos</strong>: Guernica apunta a venta directa; Banfield vende la experiencia de atención personalizada.</span></div>
+    </div>
+  </section>
+
+  <!-- Chart distribución -->
+  <section class="sec">
+    <div class="sec-label">Estructura</div>
+    <h2 class="sec-title">Distribución de la inversión</h2>
+    <p class="sec-sub">Cómo se divide el presupuesto entre las 3 campañas del lanzamiento.</p>
+
+    <div class="cards-2">
+      <div class="chart-wrap">
+        <div class="chart-title">Distribución por campaña</div>
+        <div class="chart-sub">Escenario $300K mensuales</div>
+        <canvas id="pieChart" height="220"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Inversión diaria por campaña</div>
+        <div class="chart-sub">Rango mínimo–máximo (ARS)</div>
+        <canvas id="barChart" height="220"></canvas>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ══════════════════════════════════════
+     PANEL: CAMPAÑAS
+══════════════════════════════════════ -->
+<div class="panel" id="panel-campanas">
+
+  <section class="sec alt">
+    <div class="sec-label">Campañas</div>
+    <h2 class="sec-title">Las 3 campañas del lanzamiento</h2>
+    <p class="sec-sub">Cada una tiene un rol específico. Las tres se potencian mutuamente.</p>
+
+    <div class="cards-3">
+
+      <!-- C1 -->
+      <div class="camp-card">
+        <div class="camp-head red-head">
+          <div class="camp-num">Campaña 01</div>
+          <div class="camp-name">Mensajes · Guernica</div>
+          <div class="camp-meta">📍 Instagram DM · 5–8 km de Guernica</div>
+          <div class="camp-pill">💰 $3.500–5.000 / día</div>
+        </div>
+        <div class="camp-body">
+
+          <div class="adset-block">
+            <div class="adset-title">Ad Set 1 — Frío</div>
+            <div class="field-lbl">Audiencia</div>
+            <div class="tags">
+              <span class="tag">Amplia</span>
+              <span class="tag b">Apple</span>
+              <span class="tag b">iPhone</span>
+              <span class="tag b">Tecnología</span>
+            </div>
+            <div class="field-lbl">Creatividades</div>
+            <div class="tags">
+              <span class="tag r">Stock disponible</span>
+              <span class="tag r">Ingresos diarios</span>
+              <span class="tag r">Clientes retirando</span>
+              <span class="tag r">Financiación / cuotas</span>
+              <span class="tag r">Usados en parte de pago</span>
+            </div>
+          </div>
+
+          <div class="adset-block">
+            <div class="adset-title">Ad Set 2 — Remarketing</div>
+            <div class="tags">
+              <span class="tag">Interacción IG</span>
+              <span class="tag">Reproducciones</span>
+              <span class="tag">Mensajes previos</span>
+              <span class="tag">Visitas perfil</span>
+            </div>
+            <div class="field-lbl">Creatividades</div>
+            <div class="tags">
+              <span class="tag r">"Seguís buscando iPhone?"</span>
+              <span class="tag r">"Ingresó nuevo stock"</span>
+              <span class="tag r">"Tomamos tu usado"</span>
+            </div>
+            <div class="dist-bar">
+              <div class="d-cold">FRÍO 80%</div>
+              <div class="d-rmkt">RMKT 20%</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- C2 -->
+      <div class="camp-card">
+        <div class="camp-head red-head">
+          <div class="camp-num">Campaña 02</div>
+          <div class="camp-name">Mensajes · Banfield</div>
+          <div class="camp-meta">📍 Instagram DM · 8–12 km de Banfield</div>
+          <div class="camp-pill">💰 $3.500–5.000 / día</div>
+        </div>
+        <div class="camp-body">
+
+          <div class="adset-block">
+            <div class="adset-title">Ad Set 1 — Frío</div>
+            <div class="field-lbl">Localidades</div>
+            <div class="tags">
+              <span class="tag b">Banfield</span>
+              <span class="tag b">Lomas</span>
+              <span class="tag b">Adrogué</span>
+              <span class="tag b">Temperley</span>
+              <span class="tag b">Lanús Oeste</span>
+            </div>
+            <div class="field-lbl">Creatividades</div>
+            <div class="tags">
+              <span class="tag r">Asesoría personalizada</span>
+              <span class="tag r">Agenda tu visita</span>
+              <span class="tag r">Financiación</span>
+              <span class="tag r">Renovación de equipo</span>
+              <span class="tag r">Entrega premium</span>
+            </div>
+            <div class="note-warn">⚠️ El foco <strong>no</strong> es vender el local — es vender la <strong>atención personalizada</strong>.</div>
+          </div>
+
+          <div class="adset-block">
+            <div class="adset-title">Ad Set 2 — Remarketing</div>
+            <div class="tags">
+              <span class="tag">Interacción IG</span>
+              <span class="tag">Reproducciones</span>
+              <span class="tag">Mensajes iniciados</span>
+              <span class="tag">Visitas perfil</span>
+            </div>
+            <div class="field-lbl">Creatividades</div>
+            <div class="tags">
+              <span class="tag r">"Reservá tu visita"</span>
+              <span class="tag r">"Tomamos tu iPhone usado"</span>
+              <span class="tag r">"Últimos ingresos"</span>
+            </div>
+            <div class="dist-bar">
+              <div class="d-cold">FRÍO 80%</div>
+              <div class="d-rmkt">RMKT 20%</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- C3 -->
+      <div class="camp-card">
+        <div class="camp-head dark-head">
+          <div class="camp-num">Campaña 03</div>
+          <div class="camp-name">Tráfico &amp; Audiencias</div>
+          <div class="camp-meta">🎬 Video · Alimentar remarketing</div>
+          <div class="camp-pill">💰 $3.000–5.000 / día</div>
+        </div>
+        <div class="camp-body">
+
+          <div class="adset-block">
+            <div class="adset-title">Ad Set 1 — Guernica</div>
+            <div class="tags">
+              <span class="tag">Movimiento del local</span>
+              <span class="tag">Clientes retirando</span>
+              <span class="tag">Ingresos diarios</span>
+            </div>
+          </div>
+
+          <div class="adset-block">
+            <div class="adset-title">Ad Set 2 — Banfield</div>
+            <div class="tags">
+              <span class="tag">Asesoría</span>
+              <span class="tag">Equipos premium</span>
+              <span class="tag">Videos aspiracionales</span>
+            </div>
+          </div>
+
+          <div class="adset-block">
+            <div class="adset-title">Distribución 50/50</div>
+            <div class="dist-bar">
+              <div class="d-cold" style="flex:1;">GUERNICA 50%</div>
+              <div class="d-rmkt" style="flex:1;">BANFIELD 50%</div>
+            </div>
+            <div class="field-lbl" style="margin-top:12px;">Métricas a medir</div>
+            <div class="tags">
+              <span class="tag">CPC</span>
+              <span class="tag">CTR</span>
+              <span class="tag">Costo por reproducción</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANEL: PRESUPUESTO
+══════════════════════════════════════ -->
+<div class="panel" id="panel-presupuesto">
+
+  <section class="sec alt">
+    <div class="sec-label">Inversión</div>
+    <h2 class="sec-title">Dos escenarios de presupuesto</h2>
+    <p class="sec-sub">Elegís con cuál arrancar. La estructura es idéntica — solo cambia el volumen.</p>
+
+    <!-- Toggle -->
+    <div class="toggle-row">
+      <button class="toggle-btn active" id="btn-a" onclick="toggleBudget('a')">Escenario A — $300K</button>
+      <button class="toggle-btn" id="btn-b" onclick="toggleBudget('b')">Escenario B — $450K</button>
+    </div>
+
+    <!-- Escenario A -->
+    <div id="esc-a">
+      <div class="cards-3" style="margin-bottom:24px;">
+        <div class="card accent-top">
+          <div class="card-label">Guernica Mensajes</div>
+          <div class="card-value red">$100.000</div>
+          <div class="card-sub">$3.333 / día</div>
+        </div>
+        <div class="card accent-top">
+          <div class="card-label">Banfield Mensajes</div>
+          <div class="card-value red">$100.000</div>
+          <div class="card-sub">$3.333 / día</div>
+        </div>
+        <div class="card accent-top">
+          <div class="card-label">Tráfico / Audiencias</div>
+          <div class="card-value red">$100.000</div>
+          <div class="card-sub">$3.333 / día</div>
+        </div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Campaña</th><th>Mensual</th><th>Diario</th></tr></thead>
+        <tbody>
+          <tr><td>📍 Guernica Mensajes</td><td class="hl">$100.000</td><td>$3.333</td></tr>
+          <tr><td>📍 Banfield Mensajes</td><td class="hl">$100.000</td><td>$3.333</td></tr>
+          <tr><td>🎬 Tráfico / Audiencias</td><td class="hl">$100.000</td><td>$3.333</td></tr>
+          <tr class="total"><td>TOTAL</td><td>$300.000 / mes</td><td>$10.000 / día</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Escenario B -->
+    <div id="esc-b" style="display:none;">
+      <div class="cards-3" style="margin-bottom:24px;">
+        <div class="card accent-top">
+          <div class="card-label">Guernica Mensajes</div>
+          <div class="card-value red">$150.000</div>
+          <div class="card-sub">$5.000 / día</div>
+        </div>
+        <div class="card accent-top">
+          <div class="card-label">Banfield Mensajes</div>
+          <div class="card-value red">$150.000</div>
+          <div class="card-sub">$5.000 / día</div>
+        </div>
+        <div class="card accent-top">
+          <div class="card-label">Tráfico / Audiencias</div>
+          <div class="card-value red">$150.000</div>
+          <div class="card-sub">$5.000 / día</div>
+        </div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Campaña</th><th>Mensual</th><th>Diario</th></tr></thead>
+        <tbody>
+          <tr><td>📍 Guernica Mensajes</td><td class="hl">$150.000</td><td>$5.000</td></tr>
+          <tr><td>📍 Banfield Mensajes</td><td class="hl">$150.000</td><td>$5.000</td></tr>
+          <tr><td>🎬 Tráfico / Audiencias</td><td class="hl">$150.000</td><td>$5.000</td></tr>
+          <tr class="total"><td>TOTAL</td><td>$450.000 / mes</td><td>$15.000 / día</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Chart presupuesto -->
+  <section class="sec">
+    <div class="sec-label">Comparativa</div>
+    <h2 class="sec-title">Inversión por campaña: A vs B</h2>
+    <div class="chart-wrap" style="max-width:600px;">
+      <div class="chart-title">Distribución por escenario (ARS)</div>
+      <div class="chart-sub">Comparación directa entre ambas opciones de lanzamiento</div>
+      <canvas id="budgetCompareChart" height="220"></canvas>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANEL: PROYECCIÓN
+══════════════════════════════════════ -->
+<div class="panel" id="panel-proyeccion">
+
+  <section class="sec alt">
+    <div class="sec-label">Crecimiento</div>
+    <h2 class="sec-title">Proyección a 6 meses</h2>
+    <p class="sec-sub">El escalado es gradual y condicional — aumentamos solo cuando los números lo validan.</p>
+
+    <div class="chart-wrap" style="margin-bottom:32px;">
+      <div class="chart-title">Evolución del presupuesto mensual</div>
+      <div class="chart-sub">Mayo → Octubre 2025 · Escenario base (ARS)</div>
+      <canvas id="growthChart" height="180"></canvas>
+    </div>
+
+    <table class="tbl" style="margin-bottom:32px;">
+      <thead>
+        <tr>
+          <th>Mes</th>
+          <th>Fase</th>
+          <th>Presupuesto</th>
+          <th>Conversaciones est.</th>
+          <th>Acción clave</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:var(--accent-dim)!important;">
+          <td style="color:var(--accent);font-weight:800;">Mayo</td>
+          <td>🚀 Lanzamiento</td>
+          <td class="hl">$300K–$450K</td>
+          <td>20–40</td>
+          <td>Activar campañas, primeros datos</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--text);">Junio</td>
+          <td>⚙️ Optimización</td>
+          <td class="hl">$380K–$540K</td>
+          <td>35–60</td>
+          <td>Ajustar creatividades y públicos</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--text);">Julio</td>
+          <td>📍 Consolidación</td>
+          <td class="hl">$460K–$650K</td>
+          <td>55–90</td>
+          <td>Reforzar zona ganadora</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--text);">Agosto</td>
+          <td>📦 Escala moderada</td>
+          <td class="hl">$560K–$780K</td>
+          <td>75–120</td>
+          <td>Lookalikes + nuevos formatos</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--text);">Septiembre</td>
+          <td>🌎 Expansión gradual</td>
+          <td class="hl">$660K–$900K</td>
+          <td>95–150</td>
+          <td>Ampliar cobertura geográfica</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;color:var(--text);">Octubre</td>
+          <td>⚡ Maduración</td>
+          <td class="hl">$750K–$1M</td>
+          <td>120–180</td>
+          <td>Advantage+, UGC, automatización</td>
+        </tr>
+        <tr class="total">
+          <td>Total 6 meses</td>
+          <td>—</td>
+          <td>~$3.1M – $4.3M</td>
+          <td>400–640</td>
+          <td>Canal consolidado y escalable</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="insight-block">
+      <h4>Reglas del escalado</h4>
+      <div class="ins"><div class="ins-dot"></div><span><strong>El aumento es condicional:</strong> solo escalamos si el mes anterior validó el costo por conversación objetivo.</span></div>
+      <div class="ins"><div class="ins-dot"></div><span><strong>Distribución flexible:</strong> si una sucursal supera a la otra, redistribuimos a 60/40 a su favor desde el mes 2.</span></div>
+      <div class="ins"><div class="ins-dot"></div><span><strong>Tráfico mínimo garantizado:</strong> la campaña de audiencias no baja del 25% del total en ningún escenario.</span></div>
+    </div>
+  </section>
+
+  <!-- Próximos pasos -->
+  <section class="sec">
+    <div class="sec-label">Para arrancar</div>
+    <h2 class="sec-title">Próximos pasos</h2>
+
+    <div class="cards-3">
+      <div class="step-card">
+        <div class="step-num">Paso 01</div>
+        <div class="step-title">Elegir escenario</div>
+        <div class="step-desc">Confirmar si arrancamos con $300K o $450K mensuales. La estructura de campañas es idéntica en ambos casos.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">Paso 02</div>
+        <div class="step-title">Setup de cuentas</div>
+        <div class="step-desc">Configurar Business Manager, conectar los perfiles de Instagram de ambas sucursales e instalar el pixel de Meta.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">Paso 03</div>
+        <div class="step-title">Lanzamiento en 5–7 días</div>
+        <div class="step-desc">Desde la aprobación, las 3 campañas están activas. Primer reporte con resultados a los 15 días de inicio.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ── FOOTER ─────────────────────────── -->
+<div class="footer">
+  <span class="footer-text">Propuesta preparada por MC Marketing · iPhone Guernica &amp; Banfield · Mayo 2025</span>
+  <img src="https://mcmarketingdig.com/wp-content/uploads/2026/03/cropped-Mc-MArkrting-Logo.pdf-200x67.png"
+       style="height:28px;filter:brightness(0) invert(1);opacity:.5;"
+       onerror="this.style.display='none'">
+</div>
+
+<!-- ── SCRIPTS ────────────────────────── -->
+<script>
+// ── Tab navigation
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.target.classList.add('active');
+  // init charts when visible
+  if (name === 'estrategia') { initEstrategiaCharts(); }
+  if (name === 'presupuesto') { initPresupuestoCharts(); }
+  if (name === 'proyeccion')  { initProyeccionCharts(); }
+}
+
+// ── Budget toggle
+function toggleBudget(esc) {
+  document.getElementById('esc-a').style.display = esc === 'a' ? 'block' : 'none';
+  document.getElementById('esc-b').style.display = esc === 'b' ? 'block' : 'none';
+  document.getElementById('btn-a').classList.toggle('active', esc === 'a');
+  document.getElementById('btn-b').classList.toggle('active', esc === 'b');
+}
+
+// ── Chart defaults
+const FONT = "'Inter', sans-serif";
+const RED  = '#2563eb';
+const RED2 = 'rgba(37,99,235,0.7)';
+const RED3 = 'rgba(37,99,235,0.15)';
+const BLUE = '#3b82f6';
+const BLUE2 = 'rgba(59,130,246,0.6)';
+const GRAY = '#555';
+const TEXT = '#f0f0f0';
+const TEXT2 = '#666';
+const BORDER_COL = '#2a2a2a';
+
+Chart.defaults.color = TEXT2;
+Chart.defaults.font.family = FONT;
+Chart.defaults.font.size = 11;
+
+const chartInstances = {};
+
+function destroyChart(id) {
+  if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+}
+
+// ── Estrategia charts
+function initEstrategiaCharts() {
+  // PIE
+  destroyChart('pieChart');
+  chartInstances['pieChart'] = new Chart(document.getElementById('pieChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Guernica Mensajes', 'Banfield Mensajes', 'Tráfico / Audiencias'],
+      datasets: [{
+        data: [33.3, 33.3, 33.3],
+        backgroundColor: ['#2563eb', '#3b82f6', '#1e3a8a'],
+        borderColor: '#111',
+        borderWidth: 3,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      cutout: '65%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: TEXT2, padding: 16, font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: $100.000/mes` } }
+      }
+    }
+  });
+
+  // BAR (diario)
+  destroyChart('barChart');
+  chartInstances['barChart'] = new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Guernica\nMensajes', 'Banfield\nMensajes', 'Tráfico /\nAudiencias'],
+      datasets: [
+        {
+          label: 'Mínimo',
+          data: [3500, 3500, 3000],
+          backgroundColor: 'rgba(37,99,235,0.15)',
+          borderColor: '#2563eb',
+          borderWidth: 1.5,
+          borderRadius: 5,
+        },
+        {
+          label: 'Máximo',
+          data: [5000, 5000, 5000],
+          backgroundColor: 'rgba(37,99,235,0.65)',
+          borderColor: '#2563eb',
+          borderWidth: 1.5,
+          borderRadius: 5,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: TEXT2, padding: 12 } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: $${ctx.raw.toLocaleString('es-AR')}` } }
+      },
+      scales: {
+        x: { grid: { color: BORDER_COL }, ticks: { color: TEXT2 } },
+        y: {
+          grid: { color: BORDER_COL }, ticks: { color: TEXT2,
+            callback: v => '$' + (v/1000) + 'K'
+          }
+        }
+      }
+    }
+  });
+}
+
+// ── Presupuesto charts
+function initPresupuestoCharts() {
+  destroyChart('budgetCompareChart');
+  chartInstances['budgetCompareChart'] = new Chart(document.getElementById('budgetCompareChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Guernica\nMensajes', 'Banfield\nMensajes', 'Tráfico /\nAudiencias'],
+      datasets: [
+        {
+          label: 'Escenario A ($300K)',
+          data: [100000, 100000, 100000],
+          backgroundColor: 'rgba(37,99,235,0.15)',
+          borderColor: '#2563eb',
+          borderWidth: 1.5,
+          borderRadius: 6,
+        },
+        {
+          label: 'Escenario B ($450K)',
+          data: [150000, 150000, 150000],
+          backgroundColor: 'rgba(37,99,235,0.65)',
+          borderColor: '#2563eb',
+          borderWidth: 1.5,
+          borderRadius: 6,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: TEXT2, padding: 12 } },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: $${ctx.raw.toLocaleString('es-AR')}` } }
+      },
+      scales: {
+        x: { grid: { color: BORDER_COL }, ticks: { color: TEXT2 } },
+        y: {
+          grid: { color: BORDER_COL }, ticks: { color: TEXT2,
+            callback: v => '$' + (v/1000) + 'K'
+          }
+        }
+      }
+    }
+  });
+}
+
+// ── Proyección charts
+function initProyeccionCharts() {
+  destroyChart('growthChart');
+  chartInstances['growthChart'] = new Chart(document.getElementById('growthChart'), {
+    type: 'line',
+    data: {
+      labels: ['Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [
+        {
+          label: 'Presupuesto mínimo',
+          data: [300, 380, 460, 560, 660, 750],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,0.08)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#2563eb',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.35,
+          fill: '+1',
+        },
+        {
+          label: 'Presupuesto máximo',
+          data: [450, 540, 650, 780, 900, 1000],
+          borderColor: 'rgba(37,99,235,0.4)',
+          backgroundColor: 'transparent',
+          borderWidth: 1.5,
+          borderDash: [5,4],
+          pointBackgroundColor: 'rgba(37,99,235,0.4)',
+          pointRadius: 4,
+          tension: 0.35,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'bottom', labels: { color: TEXT2, padding: 12 } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` ${ctx.dataset.label}: $${ctx.raw}K ARS`
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: BORDER_COL }, ticks: { color: TEXT2 } },
+        y: {
+          grid: { color: BORDER_COL }, ticks: { color: TEXT2,
+            callback: v => '$' + v + 'K'
+          },
+          min: 0
+        }
+      }
+    }
+  });
+}
+
+// Init first tab on load
+document.addEventListener('DOMContentLoaded', () => {
+  initEstrategiaCharts();
+});
+</script>
+
+</body>
+</html>
